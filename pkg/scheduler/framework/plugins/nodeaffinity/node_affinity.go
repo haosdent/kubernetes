@@ -24,7 +24,6 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
 	v1helper "k8s.io/kubernetes/pkg/apis/core/v1/helper"
-	"k8s.io/kubernetes/pkg/scheduler/algorithm/predicates"
 	pluginhelper "k8s.io/kubernetes/pkg/scheduler/framework/plugins/helper"
 	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/migration"
 	framework "k8s.io/kubernetes/pkg/scheduler/framework/v1alpha1"
@@ -49,7 +48,7 @@ func (pl *NodeAffinity) Name() string {
 
 // Filter invoked at the filter extension point.
 func (pl *NodeAffinity) Filter(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodeInfo *nodeinfo.NodeInfo) *framework.Status {
-	_, reasons, err := predicates.PodMatchNodeSelector(pod, nil, nodeInfo)
+	_, reasons, err := pluginhelper.PodMatchNodeSelector(pod, nil, nodeInfo)
 	return migration.PredicateResultToFrameworkStatus(reasons, err)
 }
 
